@@ -1,67 +1,95 @@
 import random
 
 def play_game():
+    """
+    Runs one round of the number guessing game.
+
+    Asks the user to select a difficulty level,
+    generates a random number in a range based on difficulty, and
+    allows the user to guess until they either guess
+    correctly or run out of attempts.
+    """
+
     print("\nChoose difficulty:")
     print("1. Easy (1-50, 10 attempts)")
     print("2. Medium (1-100, 7 attempts)")
     print("3. Hard (1-200, 5 attempts)")
 
-    choice = input("Enter 1, 2, or 3: ")
+    difficulty = input("Enter 1, 2, or 3: ")
 
-    # Set difficulty
-    if choice == "1":
-        low, high = 1, 50
-        max_attempts = 10
-    elif choice == "2":
-        low, high = 1, 100
-        max_attempts = 7
-    elif choice == "3":
-        low, high = 1, 200
-        max_attempts = 5
+    # Set difficulty settings
+    if difficulty == "1":
+        min_num, max_num = 1, 50
+        max_tries = 10
+    elif difficulty == "2":
+        min_num, max_num = 1, 100
+        max_tries = 7
+    elif difficulty == "3":
+        min_num, max_num = 1, 200
+        max_tries = 5
     else:
         print("Invalid choice. Defaulting to Medium.")
-        low, high = 1, 100
-        max_attempts = 7
+        min_num, max_num = 1, 100
+        max_tries = 7
 
-    number = random.randint(low, high)
-    attempts = 0
+    # Generate random number
+    secret_number = random.randint(min_num, max_num)
+    tries_used = 0
 
-    print(f"\nGuess a number between {low} and {high}")
-    print(f"You have {max_attempts} attempts.")
+    print(f"\nGuess a number between {min_num} and {max_num}")
+    print(f"You have {max_tries} attempts.")
 
-    while attempts < max_attempts:
-        guess = input("Enter your guess: ")
+    # Game loop
+    while tries_used < max_tries:
+        user_guess = input("Enter your guess: ")
 
         # Validate input
-        if not guess.isdigit():
+        if not user_guess.isdigit():
             print("Please enter a valid number.")
             continue
 
-        guess = int(guess)
-        attempts += 1
+        user_guess = int(user_guess)
+        tries_used += 1
 
-        if guess > number:
+        # Provide feedback
+        if user_guess > secret_number:
             print("Too high!")
-        elif guess < number:
+        elif user_guess < secret_number:
             print("Too low!")
         else:
             print("Congratulations! You guessed it!")
-            print("Attempts used:", attempts)
-            return  # end game early if correct
+            print("Attempts used:", tries_used)
+            return
 
-        print("Attempts left:", max_attempts - attempts)
+        print("Attempts left:", max_tries - tries_used)
 
     # If user runs out of attempts
-    print("Game over! The number was:", number)
+    print("Game over! The number was:", secret_number)
 
 
-# Main loop for replay
-print("Welcome to the Number Guessing Game!")
+def main():
+    """
+    Controls the overall flow of the program.
 
-while True:
-    play_game()
-    again = input("\nDo you want to play again? (yes/no): ").lower()
+    Repeatedly calls the game function and asks the user
+    if they want to play again.
+    """
+    print("Welcome to the Number Guessing Game!")
 
-    if again != "yes":
-        print("Thanks for playing!")
-        break
+    while True:
+        play_game()
+        play_again = input("\nDo you want to play again? (yes/no): ").lower()
+
+        if play_again != "yes":
+            print("Thanks for playing!")
+            break
+
+
+if __name__ == "__main__":
+    """
+    Entry point of the program.
+
+    Ensures that the main function runs only when this file
+    is executed directly.
+    """
+    main()
